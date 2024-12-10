@@ -19,3 +19,27 @@ test('Can show a User', function () {
                 ->where('data.currency', $user->currency->value);
         });
 });
+
+test('Can store a User', function () {
+    $data = [
+        'first_name' => 'Terry',
+        'last_name' => 'Tibbs',
+        'hourly_rate' => 34.99,
+        'currency' => 'gbp',
+    ];
+
+    $this->postJson(
+        route('api.users.store'),
+        $data
+    )
+        ->assertSuccessful();
+
+    $this->assertDatabaseHas(
+        'users',
+        array_merge(
+            $data,
+            // To account for the fact it is stored as an integer
+            ['hourly_rate' => 3499]
+        )
+    );
+});
