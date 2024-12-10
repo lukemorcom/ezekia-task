@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::resource('users', UserController::class);
+Route::name('api.')->group(function () {
+    require base_path('routes/api/users.php');
+
+    // add more as required
+});
