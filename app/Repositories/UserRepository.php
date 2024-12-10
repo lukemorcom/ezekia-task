@@ -12,6 +12,11 @@ class UserRepository
         return User::create($dto->toArray());
     }
 
+    public function update(User $user, UserDto $dto): void
+    {
+        $user->update($dto->toArray());
+    }
+
     public function delete(User $user): void
     {
         $user->delete();

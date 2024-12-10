@@ -3,7 +3,9 @@
 namespace App\Dtos;
 
 use App\Enums\CurrencyEnum;
-use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
+use App\Models\User;
 
 class UserDto
 {
@@ -21,6 +23,16 @@ class UserDto
             lastName: $request->input('last_name'),
             currency: CurrencyEnum::from($request->input('currency')),
             hourlyRate: $request->input('hourly_rate'),
+        );
+    }
+
+    public static function updateFromRequest(UserUpdateRequest $request, User $user): self
+    {
+        return new self(
+            firstName: $request->input('first_name', $user->first_name),
+            lastName: $request->input('last_name', $user->last_name),
+            currency: CurrencyEnum::tryFrom($request->input('currency')) ?? $user->currency,
+            hourlyRate: $request->input('hourly_rate', $user->hourly_rate),
         );
     }
 

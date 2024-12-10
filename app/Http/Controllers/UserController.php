@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Dtos\UserDto;
-use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -29,9 +29,11 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function update(Request $request, User $user)
+    public function update(UserUpdateRequest $request, User $user)
     {
-        //
+        $dto = UserDto::updateFromRequest($request, $user);
+
+        $this->repository->update($user, $dto);
     }
 
     public function destroy(User $user)
