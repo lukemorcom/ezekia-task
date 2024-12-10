@@ -43,3 +43,17 @@ test('Can store a User', function () {
         )
     );
 });
+
+test('Can delete a User', function () {
+    $user = User::factory()->create();
+
+    $this->deleteJson(
+        route('api.users.destroy', $user)
+    )
+        ->assertSuccessful();
+
+    $this->assertDatabaseMissing(
+        'users',
+        ['id' => $user->id]
+    );
+});
