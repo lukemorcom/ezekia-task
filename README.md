@@ -2,7 +2,7 @@
 
 ### Setup instructions
 
-Clone the repository, then `cd` into it and run the following
+Clone the repository, then `cd` into it and run the following to install the dependencies:
 ``` bash
 docker run --rm \
     -u "$(id -u):$(id -g)" \
@@ -12,7 +12,18 @@ docker run --rm \
     composer install --ignore-platform-reqs
 ```
 
-Migrate and seed the database
+Create a .env file
+
+Migrate and seed the database:
 ``` bash
 ./vendor/bin/sail artisan migrate:fresh --seed
 ```
+
+Run the test suite:
+```bash
+./vendor/bin/pest
+```
+
+
+### Features
+

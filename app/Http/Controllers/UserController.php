@@ -3,15 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Dtos\UserDto;
+use App\Enums\CurrencyEnum;
+use App\Http\Requests\User\UserShowRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\UserResource;
+use App\Interfaces\CurrencyConverterInterface;
 use App\Models\User;
 use App\Repositories\UserRepository;
 
 class UserController extends Controller
 {
-    public function __construct(private readonly UserRepository $repository) {}
+    public function __construct(
+        private readonly UserRepository $repository,
+        private readonly CurrencyConverterInterface $converter,
+    ) {}
 
     public function store(UserStoreRequest $request)
     {
@@ -22,9 +28,15 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-    public function show(User $user)
+    public function show(UserShowRequest $request, User $user)
     {
-        // Todo: Support converting currency
+        if ($request->has('currency')) {
+            $user->hourly_rate = $this->converter->convertCurrency(
+                $user->currency,
+                CurrencyEnum::from($request->input('currency')),
+                $user->hourly_rate,
+            );
+        }
 
         return new UserResource($user);
     }

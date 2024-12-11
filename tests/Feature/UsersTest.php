@@ -101,3 +101,17 @@ test('Can delete a User', function () {
         ['id' => $user->id]
     );
 });
+
+test('Can show a user and convert currency using the local driver', function () {
+    // This user's currency is gbp
+    $user = User::factory()->create(['currency' => 'gbp']);
+
+    $response = $this->getJson(
+        // We want it converted to usd
+        route('api.users.show', ['user' => $user, 'currency' => 'usd']),
+    )->assertSuccessful();
+
+    // The exchange rate for the gbp -> usd pair in the Local converter is 1.3
+    expect($response['data']['hourly_rate'])
+        ->toBe(number_format($user->hourly_rate * 1.3, 2));
+});
