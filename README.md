@@ -12,7 +12,10 @@ docker run --rm \
     composer install --ignore-platform-reqs
 ```
 
-Create a .env file
+Clone the example .env file and make any required changes
+``` bash
+cp .env.example .env
+```
 
 Migrate and seed the database:
 ``` bash
@@ -25,5 +28,13 @@ Run the test suite:
 ```
 
 
-### Features
+### Endpoints
+View the API documentation by visiting:
+```
+{APP_URL}/docs/api
+```
 
+Or view the Open API document in JSON format:
+```
+{APP_URL}/docs/api.json
+```
